@@ -10,6 +10,8 @@ mongoose
   .then(() => console.log('exito'))
   .catch(err => console.log(err));
 
+// prueba
+
 const port = process.env.PORT || 5000;
 
 app.listen(port, () => console.log('sde ${port}'));
