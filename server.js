@@ -1,20 +1,23 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
+const bodyParser = require('body-parser');
 
 const users = require('./routes/api/users');
 const profile = require('./routes/api/profile');
 const posts = require('./routes/api/posts');
 
-app.get('/', (req, res) => res.send('Hola'));
-const db = require('./config/keys').mongoURI;
 
+//middleware para body parser (poder buscar con req.body)
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+// Conexion a db
+const db = require('./config/keys').mongoURI;
 mongoose
   .connect(db)
   .then(() => console.log('exito'))
   .catch(err => console.log(err));
-
-app.get('/', (req, res) => res.send("hola") );
 
 // Usar las rutas
 app.use('/api/users', users);
