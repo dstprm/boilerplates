@@ -11,6 +11,8 @@ router.get('/placeholder', (req, res) =>
 router.post('/register',(req, res) => {
   User.findOne({email: req.body.email})
     .then(user => {
+      //console.log(email);
+      //console.log(user);
       if(user) {
         return res.status(400).json({email: "Email already exists"});
       } else {
@@ -34,5 +36,28 @@ router.post('/register',(req, res) => {
       }
     })
 });
+
+router.post('/login', (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+
+  User.findOne({email: email})
+      .then(user => {
+        if(!user) { //Si al buscar no encuentra usuario con ese email
+          return res.status(404).json({email: 'User not found'});
+        }
+
+        // Si es que lo encuentra, que chequee que contrasena es correcta
+        bcrypt.compare(password, user.password)
+              .then(isMatch => {
+                if(isMatch) {
+                  return res.status(200).json({msg: 'login successful'});
+                } else {
+                  return res.status(400).json({password: 'incorrect password'});
+                }
+              });
+      });
+});
+
 
 module.exports = router;
