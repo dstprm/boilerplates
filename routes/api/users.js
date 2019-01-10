@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcryptjs')
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const keys = require('../../config/keys');
 
 const User = require('../../models/User');
 
@@ -50,8 +52,19 @@ router.post('/login', (req, res) => {
         // Si es que lo encuentra, que chequee que contrasena es correcta
         bcrypt.compare(password, user.password)
               .then(isMatch => {
-                if(isMatch) {
-                  return res.status(200).json({msg: 'login successful'});
+                if(isMatch) { // con json web token
+                  const payload = {
+                    id: user.id,
+                    name: user.name,
+                  };
+                  // Sign token
+                    jwt.sign(payload, keys.key, {expiresIn: 3600}, (err, token) => {
+                      res.json({
+                        success: true,
+                        token: 'Bearer ' + token
+                      })
+                    });
+
                 } else {
                   return res.status(400).json({password: 'incorrect password'});
                 }
