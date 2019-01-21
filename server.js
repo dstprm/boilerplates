@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 const bodyParser = require('body-parser');
+const passport = require('passport');
 
 const users = require('./routes/api/users');
 const profile = require('./routes/api/profile');
@@ -11,6 +12,12 @@ const posts = require('./routes/api/posts');
 //middleware para body parser (poder buscar con req.body)
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+//middleware para passport (autenticacion de tokens)
+app.use(passport.initialize());
+
+// passport config
+require('./config/passport')(passport);
 
 // Conexion a db
 const db = require('./config/keys').mongoURI;

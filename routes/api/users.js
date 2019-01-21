@@ -3,12 +3,9 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const keys = require('../../config/keys');
+const passport = require('passport');
 
 const User = require('../../models/User');
-
-router.get('/placeholder', (req, res) =>
-  res.json({ hola: 2 })
-);
 
 router.post('/register',(req, res) => {
   User.findOne({email: req.body.email})
@@ -72,5 +69,9 @@ router.post('/login', (req, res) => {
       });
 });
 
+
+router.get('/current', passport.authenticate('jwt', { session: false }), (req, res) => {
+  res.json(req.user);
+});
 
 module.exports = router;
