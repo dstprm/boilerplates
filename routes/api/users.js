@@ -4,10 +4,19 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const keys = require('../../config/keys');
 const passport = require('passport');
-
 const User = require('../../models/User');
 
+// input validation
+const validateRegisterInput = require('../../validation/register');
+
 router.post('/register',(req, res) => {
+
+  const { errors, isValid } = validateRegisterInput(req.body);
+
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
   User.findOne({email: req.body.email})
     .then(user => {
       //console.log(email);
@@ -69,7 +78,7 @@ router.post('/login', (req, res) => {
       });
 });
 
-
+// Ejemplo de uso de tokens
 router.get('/current', passport.authenticate('jwt', { session: false }), (req, res) => {
   res.json(req.user);
 });

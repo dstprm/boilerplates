@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 //middleware para passport (autenticacion de tokens)
 app.use(passport.initialize());
 
-// passport config
+// passport config [No entiendo muy bien nomenclatura] TODO
 require('./config/passport')(passport);
 
 // Conexion a db
