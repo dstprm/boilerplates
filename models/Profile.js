@@ -1,21 +1,22 @@
 const mongoose = require('mongoose');
-const schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 
 
 // schema
 const profileSchema = new Schema({
-  name: {
-    type: String,
-    required: true
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'users'
   },
-  email: {
+  handle: {
     type: String,
-    required: true
+    required: true,
+    max: 40
   },
-  password: {
+  status: {
     type: String,
     required: true
   }
 });
 
-module.exports = User = mongoose.model('profile', profileSchema);
+module.exports = Profile = mongoose.model('profile', profileSchema);
